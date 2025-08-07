@@ -6,6 +6,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,33 +14,59 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.i18n.I18n
+import com.carlosjimz87.tradingchecklist.ui.theme.AppColors
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) {
+fun ChecklistProgress(
+    progress: Float,
+    isCompact: Boolean,
+    onReset: () -> Unit,
+    snackbarHostState: SnackbarHostState
+) {
     val showProgress = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val trackColor = if (progress == 1f) AppColors.Success else AppColors.Primary
 
     LaunchedEffect(Unit) {
         showProgress.value = true
+    }
+
+    LaunchedEffect(progress) {
+        showProgress.value = true
+        if (progress == 1f) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = I18n.strings.completed_message,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
     }
 
     AnimatedVisibility(
@@ -72,8 +99,8 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
                     LinearProgressIndicator(
                         progress = { progress },
                         modifier = Modifier.weight(1f),
-                        color = ProgressIndicatorDefaults.linearColor,
-                        trackColor = ProgressIndicatorDefaults.linearTrackColor,
+                        color = trackColor,
+                        trackColor = AppColors.PrimaryLight,
                         strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
                     )
                     Spacer(Modifier.width(8.dp))
@@ -89,7 +116,7 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
                     CircularProgressIndicator(
                         progress = { progress },
                         strokeWidth = 10.dp,
-                        color = Color(0xFF7C4DFF),
+                        color = trackColor,
                         modifier = Modifier.fillMaxSize()
                     )
                     Text(
@@ -103,16 +130,13 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
 
             Spacer(Modifier.height(16.dp))
 
-            if (progress == 1f) {
-                Text(
-                    text = I18n.strings.completed_message,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color(0xFF388E3C)
-                )
-                Spacer(Modifier.height(12.dp))
-            }
-
-            OutlinedButton(onClick = onReset) {
+            OutlinedButton(
+                onClick = onReset,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = AppColors.Primary
+                ),
+                border = BorderStroke(1.dp, AppColors.Primary)
+            ) {
                 Text(I18n.strings.reset_button)
             }
         }

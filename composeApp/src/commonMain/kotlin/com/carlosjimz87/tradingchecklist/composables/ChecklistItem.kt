@@ -3,13 +3,11 @@ package com.carlosjimz87.tradingchecklist.composables
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+import com.carlosjimz87.tradingchecklist.ui.theme.AppColors
 
 @Composable
 fun ChecklistItem(
@@ -38,7 +38,7 @@ fun ChecklistItem(
         label = "FillProgress"
     ) { if (it) 1f else 0f }
 
-    val backgroundColor = Color(0xFFE6F4EA)
+    val backgroundColor = AppColors.CompletedItemBackground
 
     Card(
         modifier = Modifier
@@ -66,13 +66,17 @@ fun ChecklistItem(
             ) {
                 Checkbox(
                     checked = item.checked,
-                    onCheckedChange = null
+                    onCheckedChange = null,
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = AppColors.Primary,
+                        checkmarkColor = Color.White
+                    )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = item.title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = AppColors.OnSurface
                 )
             }
         }
