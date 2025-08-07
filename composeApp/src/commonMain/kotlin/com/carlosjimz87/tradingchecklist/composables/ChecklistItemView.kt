@@ -16,22 +16,16 @@ import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
 
 @Composable
-fun ChecklistItemView(item: ChecklistItem) {
+fun ChecklistItemView(item: ChecklistItem, onCheckChange: (Boolean) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .toggleable(
-                value = item.checked,
-                onValueChange = { item.checked = it }
-            )
+            .toggleable(value = item.checked, onValueChange = onCheckChange)
             .padding(8.dp)
     ) {
-        Checkbox(
-            checked = item.checked,
-            onCheckedChange = null // handled by Row toggleable
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = item.title, style = MaterialTheme.typography.bodyLarge)
+        Checkbox(checked = item.checked, onCheckedChange = null)
+        Spacer(Modifier.width(8.dp))
+        Text(item.title)
     }
 }
