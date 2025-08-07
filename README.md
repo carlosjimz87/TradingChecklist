@@ -1,6 +1,6 @@
-# Kotlin Multiplatform Checklist App
+# KMP Trading Checklist App 📋🤖
 
-This is a **Kotlin Multiplatform** project targeting:
+This is a **KMP** project targeting:
 
 - ✅ **Android**
 - ✅ **iOS**
@@ -109,8 +109,4 @@ Modular and platform-specific logic decoupled with `expect/actual` mechanism.
 
 ## 📜 License
 
-MIT © YourNameHere
-
----
-
-Made with ❤️ using Kotlin Multiplatform.
+MIT © created by [Carlos Jim](https://www.carlosjimz.dev/)
