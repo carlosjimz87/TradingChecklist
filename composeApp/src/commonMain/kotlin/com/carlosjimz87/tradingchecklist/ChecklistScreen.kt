@@ -1,6 +1,5 @@
 package com.carlosjimz87.tradingchecklist
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.composables.ChecklistItemList
@@ -32,6 +30,7 @@ import com.carlosjimz87.tradingchecklist.composables.ChecklistProgress
 import com.carlosjimz87.tradingchecklist.data.ChecklistRepository
 import com.carlosjimz87.tradingchecklist.data.ChecklistRepositoryImpl
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+import com.carlosjimz87.tradingchecklist.i18n.I18n
 
 @Composable
 fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl()) {
@@ -124,8 +123,8 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
         if (showResetDialog) {
             AlertDialog(
                 onDismissRequest = { showResetDialog = false },
-                title = { Text("Reset checklist?") },
-                text = { Text("Are you sure you want to uncheck all items?") },
+                title = { Text(I18n.strings.reset_button) },
+                text = { Text(I18n.strings.confirm_reset) },
                 confirmButton = {
                     TextButton(onClick = {
                         checklistItems = checklistItems.map { it.copy(checked = false) }

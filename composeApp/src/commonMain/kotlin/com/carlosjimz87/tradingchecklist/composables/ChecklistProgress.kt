@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.carlosjimz87.tradingchecklist.i18n.I18n
 import kotlin.math.roundToInt
 
 @Composable
@@ -34,7 +35,7 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "GOLD Checklist",
+            text = I18n.strings.checklist_title,
             style = textStyle
         )
 
@@ -81,7 +82,7 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
 
         if (progress == 1f) {
             Text(
-                text = "✅ Checklist completed!",
+                text = I18n.strings.completed_message,
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color(0xFF388E3C)
             )
@@ -89,7 +90,7 @@ fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) 
         }
 
         OutlinedButton(onClick = onReset) {
-            Text("Reset checklist")
+            Text(I18n.strings.reset_button)
         }
     }
 }

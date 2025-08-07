@@ -2,8 +2,12 @@ package com.carlosjimz87.tradingchecklist
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import com.carlosjimz87.tradingchecklist.i18n.I18n
 
 fun main() = application {
+
+    I18n.load(getCurrentLocale())
+
     Window(
         onCloseRequest = ::exitApplication,
         title = "TradingChecklist",
