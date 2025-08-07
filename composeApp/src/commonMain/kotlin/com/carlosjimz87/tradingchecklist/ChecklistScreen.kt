@@ -46,7 +46,9 @@ import com.carlosjimz87.tradingchecklist.i18n.I18n
 import com.carlosjimz87.tradingchecklist.ui.theme.AppColors
 
 @Composable
-fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl()) {
+fun ChecklistScreen(
+    repository: ChecklistRepository = inject()
+) {
     var checklistItems by remember { mutableStateOf<List<ChecklistItem>>(emptyList()) }
     var showResetDialog by remember { mutableStateOf(false) }
     var restartKey by remember { mutableStateOf(0) }

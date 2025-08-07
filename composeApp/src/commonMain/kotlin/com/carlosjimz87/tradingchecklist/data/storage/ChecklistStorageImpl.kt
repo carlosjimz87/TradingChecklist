@@ -9,5 +9,5 @@ class ChecklistStorageImpl : ChecklistStorage {
         savedItems = items
     }
 
-    override fun loadChecklist(): List<ChecklistItem> = savedItems
+    override fun getChecklist(): List<ChecklistItem> = savedItems
 }

@@ -11,7 +11,7 @@ class DesktopChecklistStorageImpl : ChecklistStorage {
         file.writeText(Json.encodeToString(items))
     }
 
-    override fun loadChecklist(): List<ChecklistItem>? {
+    override fun getChecklist(): List<ChecklistItem>? {
         return if (file.exists()) {
             try {
                 Json.decodeFromString(file.readText())

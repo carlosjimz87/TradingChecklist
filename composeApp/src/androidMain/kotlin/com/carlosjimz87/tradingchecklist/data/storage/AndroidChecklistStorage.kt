@@ -13,7 +13,7 @@ class AndroidChecklistStorage(private val context: Context) : ChecklistStorage {
         file.writeText(Json.encodeToString(items))
     }
 
-    override fun loadChecklist(): List<ChecklistItem>? {
+    override fun getChecklist(): List<ChecklistItem>? {
         val file = context.getFileStreamPath(fileName)
         return if (file.exists()) {
             try {

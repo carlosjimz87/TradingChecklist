@@ -30,7 +30,7 @@ class IOSChecklistStorage : ChecklistStorage {
         )
     }
 
-    override fun loadChecklist(): List<ChecklistItem>? {
+    override fun getChecklist(): List<ChecklistItem>? {
         val path = getFilePath()
         val fileManager = NSFileManager.defaultManager
 
