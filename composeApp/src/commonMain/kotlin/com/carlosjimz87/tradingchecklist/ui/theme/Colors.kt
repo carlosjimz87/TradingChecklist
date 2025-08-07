@@ -8,5 +8,4 @@ object AppColors {
     val PrimaryLight = Color(0xFFD1C4E9)
     val CompletedItemBackground = Color(0xFFE6F4EA)
     val OnSurface = Color(0xFF212121)
-    val CompletedText = Color(0xFF388E3C)
 }

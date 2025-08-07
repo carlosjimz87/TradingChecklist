@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -34,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.composables.ChecklistItemList
 import com.carlosjimz87.tradingchecklist.composables.ChecklistProgress
@@ -59,24 +63,40 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
         if (checklistItems.isNotEmpty()) completed.toFloat() / checklistItems.size else 0f
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val isCompact = maxWidth < 600.dp
         Scaffold(
             snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { data ->
-                        Snackbar(
-                            containerColor = AppColors.Success.copy(alpha = 0.95f),
-                            contentColor = Color.White,
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(data.visuals.message)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    contentAlignment = if (isCompact) Alignment.BottomCenter else Alignment.BottomEnd
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .then(
+                                if (isCompact) Modifier.fillMaxWidth()
+                                else Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .wrapContentWidth(align = Alignment.CenterHorizontally)
+                            )
+                    ) {
+                        SnackbarHost(
+                            hostState = snackbarHostState,
+                            modifier = Modifier.widthIn(max = 400.dp),
+                        ) { data ->
+                            Snackbar(
+                                containerColor = AppColors.Success.copy(alpha = 0.95f),
+                                contentColor = Color.White,
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(data.visuals.message)
+                            }
                         }
                     }
-                )
+                }
             }
         ) { padding ->
-            val isCompact = maxWidth < 600.dp
             val horizontalPadding = if (isCompact) 16.dp else 48.dp
 
             Surface(modifier = Modifier.fillMaxSize()) {
