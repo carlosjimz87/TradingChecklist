@@ -20,6 +20,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +37,7 @@ import com.carlosjimz87.tradingchecklist.i18n.I18n
 fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl()) {
     var checklistItems by remember { mutableStateOf<List<ChecklistItem>>(emptyList()) }
     var showResetDialog by remember { mutableStateOf(false) }
+    var restartKey by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         checklistItems = repository.getChecklist()
@@ -58,22 +60,26 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
                         .padding(horizontal = horizontalPadding, vertical = 24.dp)
                         .fillMaxSize()
                 ) {
-                    ChecklistProgress(
-                        progress = progress,
-                        isCompact = true,
-                        onReset = { showResetDialog = true },
-                    )
+                    key(restartKey){
+                        ChecklistProgress(
+                            progress = progress,
+                            isCompact = true,
+                            onReset = { showResetDialog = true },
+                        )
+                    }
 
                     Spacer(Modifier.height(16.dp))
 
-                    ChecklistItemList(
-                        checklistItems = checklistItems,
-                        onItemChecked = { index, checked ->
-                            checklistItems = checklistItems.toMutableList().apply {
-                                this[index] = this[index].copy(checked = checked)
+                    key(restartKey){
+                        ChecklistItemList(
+                            checklistItems = checklistItems,
+                            onItemChecked = { index, checked ->
+                                checklistItems = checklistItems.toMutableList().apply {
+                                    this[index] = this[index].copy(checked = checked)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
 
             } else {
@@ -90,15 +96,17 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
                             .weight(1f)
                             .fillMaxHeight()
                     ) {
-                        ChecklistItemList(
-                            checklistItems = checklistItems,
-                            onItemChecked = { index, checked ->
-                                checklistItems = checklistItems.toMutableList().apply {
-                                    this[index] = this[index].copy(checked = checked)
-                                }
-                            },
-                            spacing = 12.dp
-                        )
+                        key(restartKey){
+                            ChecklistItemList(
+                                checklistItems = checklistItems,
+                                onItemChecked = { index, checked ->
+                                    checklistItems = checklistItems.toMutableList().apply {
+                                        this[index] = this[index].copy(checked = checked)
+                                    }
+                                },
+                                spacing = 12.dp
+                            )
+                        }
                     }
 
                     Spacer(Modifier.width(48.dp))
@@ -109,11 +117,13 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
                             .weight(1f) // Igual peso que la izquierda
                             .fillMaxHeight()
                     ) {
-                        ChecklistProgress(
-                            progress = progress,
-                            isCompact = false,
-                            onReset = { showResetDialog = true }
-                        )
+                        key(restartKey){
+                            ChecklistProgress(
+                                progress = progress,
+                                isCompact = false,
+                                onReset = { showResetDialog = true }
+                            )
+                        }
                     }
                 }
             }
@@ -128,6 +138,7 @@ fun ChecklistScreen(repository: ChecklistRepository = ChecklistRepositoryImpl())
                 confirmButton = {
                     TextButton(onClick = {
                         checklistItems = checklistItems.map { it.copy(checked = false) }
+                        restartKey++ // Force recompose
                         showResetDialog = false
                     }) { Text("Yes") }
                 },

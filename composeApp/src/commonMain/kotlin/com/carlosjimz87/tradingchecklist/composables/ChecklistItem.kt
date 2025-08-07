@@ -49,7 +49,6 @@ fun ChecklistItem(
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
 
-            // Fondo animado con Canvas desde la derecha
             Canvas(modifier = Modifier.matchParentSize()) {
                 val width = size.width * fillProgress
                 drawRect(

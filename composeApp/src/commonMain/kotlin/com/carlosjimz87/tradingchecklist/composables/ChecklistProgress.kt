@@ -1,5 +1,11 @@
 package com.carlosjimz87.tradingchecklist.composables
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +23,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,70 +36,85 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ChecklistProgress(progress: Float, isCompact: Boolean, onReset: () -> Unit) {
-    val textStyle =
-        if (isCompact) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium
+    val showProgress = remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    LaunchedEffect(Unit) {
+        showProgress.value = true
+    }
+
+    AnimatedVisibility(
+        visible = showProgress.value,
+        enter = slideInVertically(
+            initialOffsetY = { -it },
+            animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
+        ) + fadeIn(animationSpec = tween(durationMillis = 400)),
+        exit = ExitTransition.None
     ) {
-        Text(
-            text = I18n.strings.checklist_title,
-            style = textStyle
-        )
+        val textStyle =
+            if (isCompact) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium
 
-        Spacer(Modifier.height(16.dp))
-
-        if (isCompact) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                LinearProgressIndicator(
-                    progress = { progress },
-                    modifier = Modifier.weight(1f),
-                    color = ProgressIndicatorDefaults.linearColor,
-                    trackColor = ProgressIndicatorDefaults.linearTrackColor,
-                    strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "${(progress * 100).roundToInt()}%",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.widthIn(min = 40.dp),
-                    textAlign = TextAlign.End
-                )
-            }
-        } else {
-            Box(modifier = Modifier.size(160.dp)) {
-                CircularProgressIndicator(
-                    progress = { progress },
-                    strokeWidth = 10.dp,
-                    color = Color(0xFF7C4DFF),
-                    modifier = Modifier.fillMaxSize()
-)
-                Text(
-                    text = "${(progress * 100).roundToInt()}%",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        if (progress == 1f) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = I18n.strings.completed_message,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color(0xFF388E3C)
+                text = I18n.strings.checklist_title,
+                style = textStyle
             )
-            Spacer(Modifier.height(12.dp))
-        }
 
-        OutlinedButton(onClick = onReset) {
-            Text(I18n.strings.reset_button)
+            Spacer(Modifier.height(16.dp))
+
+            if (isCompact) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.weight(1f),
+                        color = ProgressIndicatorDefaults.linearColor,
+                        trackColor = ProgressIndicatorDefaults.linearTrackColor,
+                        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "${(progress * 100).roundToInt()}%",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.widthIn(min = 40.dp),
+                        textAlign = TextAlign.End
+                    )
+                }
+            } else {
+                Box(modifier = Modifier.size(160.dp)) {
+                    CircularProgressIndicator(
+                        progress = { progress },
+                        strokeWidth = 10.dp,
+                        color = Color(0xFF7C4DFF),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Text(
+                        text = "${(progress * 100).roundToInt()}%",
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.align(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            if (progress == 1f) {
+                Text(
+                    text = I18n.strings.completed_message,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFF388E3C)
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+
+            OutlinedButton(onClick = onReset) {
+                Text(I18n.strings.reset_button)
+            }
         }
     }
 }
