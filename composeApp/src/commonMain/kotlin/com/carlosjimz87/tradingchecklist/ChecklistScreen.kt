@@ -1,15 +1,23 @@
 package com.carlosjimz87.tradingchecklist
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.carlosjimz87.tradingchecklist.composables.ChecklistItemView
+import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
 
-// 1. SHARED UI ENTRY POINT
 @Composable
 fun ChecklistScreen() {
     val checklistItems = remember {
@@ -45,37 +53,3 @@ fun ChecklistScreen() {
         }
     }
 }
-
-// 2. ITEM MODEL
-data class ChecklistItem(val title: String, var checked: Boolean = false)
-
-// 3. ITEM VIEW
-@Composable
-fun ChecklistItemView(item: ChecklistItem) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = item.checked,
-                onValueChange = { item.checked = it }
-            )
-            .padding(8.dp)
-    ) {
-        Checkbox(
-            checked = item.checked,
-            onCheckedChange = null // handled by Row toggleable
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = item.title, style = MaterialTheme.typography.bodyLarge)
-    }
-}
-
-// 4. PLATFORM-SPECIFIC ENTRY POINTS
-//fun getDesktopApp() = application {
-//    Window(onCloseRequest = ::exitApplication, title = "Trading Checklist") {
-//        ChecklistScreen()
-//    }
-//}
-//
-//fun getIOSApp() = ComposeUIViewController { ChecklistScreen() }
