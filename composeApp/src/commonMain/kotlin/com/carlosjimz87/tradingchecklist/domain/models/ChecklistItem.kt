@@ -1,3 +1,9 @@
 package com.carlosjimz87.tradingchecklist.domain.models
 
-data class ChecklistItem(val title: String, var checked: Boolean = false)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ChecklistItem(
+    val title: String,
+    val checked: Boolean = false
+)

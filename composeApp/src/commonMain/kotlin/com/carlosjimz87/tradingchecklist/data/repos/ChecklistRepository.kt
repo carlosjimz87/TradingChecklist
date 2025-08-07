@@ -1,4 +1,4 @@
-package com.carlosjimz87.tradingchecklist.data
+package com.carlosjimz87.tradingchecklist.data.repos
 
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
 
