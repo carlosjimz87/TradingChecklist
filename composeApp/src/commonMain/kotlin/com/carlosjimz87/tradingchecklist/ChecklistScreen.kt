@@ -1,8 +1,5 @@
 package com.carlosjimz87.tradingchecklist
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -47,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.composables.ChecklistItemList
+import com.carlosjimz87.tradingchecklist.composables.ChecklistListWithSave
 import com.carlosjimz87.tradingchecklist.composables.ChecklistProgress
 import com.carlosjimz87.tradingchecklist.composables.EmptyListMessage
 import com.carlosjimz87.tradingchecklist.composables.PagerIndicator
@@ -75,7 +74,6 @@ fun ChecklistScreen(
         snapshotFlow { derived.value }.collectAsState(initial = 0)
     }
 
-
     if (strategies.isEmpty()) {
         EmptyListMessage {
             coroutineScope.launch {
@@ -84,6 +82,7 @@ fun ChecklistScreen(
         }
         return
     }
+
     Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
             state = pagerState,
@@ -93,7 +92,15 @@ fun ChecklistScreen(
         ) { page ->
             val strategy = strategies[page]
 
-            var checklistItems by remember(restartKey, page) { mutableStateOf(strategy.checklist) }
+            var checklistItems by remember(restartKey, page) {
+                mutableStateOf(strategy.checklist)
+            }
+
+            LaunchedEffect(restartKey, page) {
+                val updatedStrategies = repository.getStrategies()
+                checklistItems = updatedStrategies.firstOrNull { it.id == strategy.id }?.checklist
+                    ?: strategy.checklist
+            }
 
             val completed = checklistItems.count { it.checked }
             val progress =
@@ -137,11 +144,10 @@ fun ChecklistScreen(
                 ) { padding ->
                     val horizontalPadding = if (isCompact) 16.dp else 48.dp
 
-
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = strategy.getColor()
-                        ) {
+                    ) {
                         if (isCompact) {
                             Column(
                                 modifier = Modifier
@@ -162,13 +168,12 @@ fun ChecklistScreen(
                                 Spacer(Modifier.height(16.dp))
 
                                 key(restartKey) {
-                                    ChecklistItemList(
+                                    ChecklistListWithSave(
+                                        restartKey = restartKey,
                                         checklistItems = checklistItems,
-                                        onItemChecked = { index, checked ->
-                                            checklistItems = checklistItems.toMutableList().apply {
-                                                this[index] = this[index].copy(checked = checked)
-                                            }
-                                        }
+                                        onChecklistChange = { checklistItems = it },
+                                        strategy = strategy,
+                                        repository = repository
                                     )
                                 }
                             }
@@ -186,16 +191,12 @@ fun ChecklistScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     key(restartKey) {
-                                        ChecklistItemList(
+                                        ChecklistListWithSave(
+                                            restartKey = restartKey,
                                             checklistItems = checklistItems,
-                                            onItemChecked = { index, checked ->
-                                                checklistItems =
-                                                    checklistItems.toMutableList().apply {
-                                                        this[index] =
-                                                            this[index].copy(checked = checked)
-                                                    }
-                                            },
-                                            spacing = 12.dp
+                                            onChecklistChange = { checklistItems = it },
+                                            strategy = strategy,
+                                            repository = repository
                                         )
                                     }
                                 }
@@ -236,6 +237,9 @@ fun ChecklistScreen(
                                     onClick = {
                                         checklistItems =
                                             checklistItems.map { it.copy(checked = false) }
+                                        coroutineScope.launch {
+                                            repository.resetStrategy(strategy.id)
+                                        }
                                         restartKey++
                                         showResetDialog = false
                                     },
@@ -254,6 +258,7 @@ fun ChecklistScreen(
                 }
             }
         }
+
         PagerIndicator(
             pageCount = strategies.size,
             currentPage = currentPage,

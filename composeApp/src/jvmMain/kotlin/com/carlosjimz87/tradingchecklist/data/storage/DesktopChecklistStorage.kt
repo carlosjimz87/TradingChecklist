@@ -1,6 +1,6 @@
 package com.carlosjimz87.tradingchecklist.data.storage
 
-import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+import com.carlosjimz87.tradingchecklist.di.defaultStrategies
 import com.carlosjimz87.tradingchecklist.domain.models.Strategy
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -17,29 +17,27 @@ class DesktopChecklistStorageImpl : StrategyStorage {
         return File(baseDir, "${strategyId}_checklist.json")
     }
 
-    override fun saveChecklist(strategyId: String, items: List<ChecklistItem>) {
-        fileFor(strategyId).writeText(Json.encodeToString(items))
+    override fun saveStrategy(strategy: Strategy) {
+        fileFor(strategy.id).writeText(Json.encodeToString(strategy))
     }
 
-    override fun getChecklist(strategyId: String): List<ChecklistItem>? {
-        val file = fileFor(strategyId)
-        return if (file.exists()) {
+    override fun getAllStrategies(): List<Strategy> {
+        val files = baseDir
+            .listFiles { _, name -> name.endsWith("_checklist.json") }
+            ?: return defaultStrategies()
+
+        val saved = files.mapNotNull { file ->
             try {
-                Json.decodeFromString(file.readText())
+                Json.decodeFromString<Strategy>(file.readText())
             } catch (e: Exception) {
                 null
             }
-        } else null
-    }
+        }
 
-    override fun getAllStrategies(): List<Strategy>? {
-        return baseDir
-            .listFiles { _, name -> name.endsWith("_checklist.json") }
-            ?.mapNotNull { file ->
-                val strategyId = file.name.removeSuffix("_checklist.json")
-                getChecklist(strategyId)?.let { checklist ->
-                    Strategy(id = strategyId, name = strategyId, checklist = checklist, description = "Checklist for $strategyId")
-                }
-            }
+        val defaults = defaultStrategies()
+
+        return defaults.map { default ->
+            saved.find { it.id == default.id } ?: default
+        }
     }
 }

@@ -6,9 +6,11 @@ import com.carlosjimz87.tradingchecklist.data.storage.StrategyStorage
 import com.carlosjimz87.tradingchecklist.data.storage.StrategyStorageImpl
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
 import com.carlosjimz87.tradingchecklist.domain.models.Strategy
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun commonModule() = module {
+fun commonModule(platformModule: Module) = module {
+    includes(platformModule)
     single<StrategyStorage> { StrategyStorageImpl() }
     single<StrategyRepository> { StrategyRepositoryImpl(get()) }
 }

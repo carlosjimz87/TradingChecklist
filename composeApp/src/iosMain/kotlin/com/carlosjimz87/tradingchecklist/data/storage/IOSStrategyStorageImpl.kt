@@ -1,9 +1,17 @@
 package com.carlosjimz87.tradingchecklist.data.storage
-import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+
+import com.carlosjimz87.tradingchecklist.di.defaultStrategies
 import com.carlosjimz87.tradingchecklist.domain.models.Strategy
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.serialization.json.Json
-import platform.Foundation.*
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSSearchPathForDirectoriesInDomains
+import platform.Foundation.NSString
+import platform.Foundation.NSUTF8StringEncoding
+import platform.Foundation.NSUserDomainMask
+import platform.Foundation.stringWithContentsOfFile
+import platform.Foundation.writeToFile
 
 @OptIn(ExperimentalForeignApi::class)
 class IOSStrategyStorageImpl : StrategyStorage {
@@ -19,53 +27,44 @@ class IOSStrategyStorageImpl : StrategyStorage {
         return "$documentsDirectory/${strategyId}_checklist.json"
     }
 
-
-    override fun saveChecklist(
-        strategyId: String,
-        items: List<ChecklistItem>
-    ) {
-        val jsonString = Json.encodeToString(items)
+    override fun saveStrategy(strategy: Strategy) {
+        val jsonString = Json.encodeToString(strategy)
         val nsString = jsonString as NSString
         nsString.writeToFile(
-            path = getFilePath(strategyId),
+            path = getFilePath(strategy.id),
             atomically = true,
             encoding = NSUTF8StringEncoding,
             error = null
         )
     }
 
-    override fun getChecklist(strategyId: String): List<ChecklistItem>? {
-        val path = getFilePath(strategyId)
-        val fileManager = NSFileManager.defaultManager
-
-        return if (fileManager.fileExistsAtPath(path)) {
-            try {
-                val content = NSString.stringWithContentsOfFile(path, NSUTF8StringEncoding, null)?.toString()
-                Json.decodeFromString(content ?: return null)
-            } catch (e: Exception) {
-                null
-            }
-        } else null
-    }
-
-    override fun getAllStrategies(): List<Strategy>? {
-        val directories = NSSearchPathForDirectoriesInDomains(
-            directory = NSDocumentDirectory,
-            domainMask = NSUserDomainMask,
-            expandTilde = true
-        )
-        val documentsDirectory = directories.first() as? String ?: return null
+    override fun getAllStrategies(): List<Strategy> {
+        val directories =
+            NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true)
+        val documentsDirectory = directories.first() as? String ?: return defaultStrategies()
 
         val fileManager = NSFileManager.defaultManager
-        val fileNames = fileManager.contentsOfDirectoryAtPath(documentsDirectory, null) ?: return null
+        val fileNames = fileManager.contentsOfDirectoryAtPath(documentsDirectory, null)
+            ?: return defaultStrategies()
 
-        return fileNames.filterIsInstance<String>()
+        val saved = fileNames.filterIsInstance<String>()
             .filter { it.endsWith("_checklist.json") }
             .mapNotNull { fileName ->
-                val strategyId = fileName.removeSuffix("_checklist.json")
-                getChecklist(strategyId)?.let { checklist ->
-                    Strategy(id = strategyId, name = strategyId.replaceFirstChar { it.uppercase() }, checklist = checklist, description = "Checklist for $strategyId")
+                val path = "$documentsDirectory/$fileName"
+                try {
+                    val jsonString =
+                        NSString.stringWithContentsOfFile(path, NSUTF8StringEncoding, null)
+                            ?.toString()
+                    Json.decodeFromString<Strategy>(jsonString ?: return@mapNotNull null)
+                } catch (_: Exception) {
+                    null
                 }
             }
+
+        val defaults = defaultStrategies()
+
+        return defaults.map { default ->
+            saved.find { it.id == default.id } ?: default
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.carlosjimz87.tradingchecklist.data.storage
 
 import android.content.Context
-import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+import com.carlosjimz87.tradingchecklist.di.defaultStrategies
 import com.carlosjimz87.tradingchecklist.domain.models.Strategy
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -9,37 +9,34 @@ import java.io.File
 class AndroidChecklistStorageImpl(private val context: Context) : StrategyStorage {
 
     private fun getFile(strategyId: String): File {
-        return context.getFileStreamPath("${strategyId}_checklist.json")
+        val folder = File(context.filesDir, "checklists")
+        if (!folder.exists()) folder.mkdirs()
+        return File(folder, "${strategyId}_checklist.json")
     }
 
-    override fun saveChecklist(strategyId: String, items: List<ChecklistItem>) {
-        val file = getFile(strategyId)
-        file.writeText(Json.encodeToString(items))
+    override fun saveStrategy(strategy: Strategy) {
+        val file = getFile(strategy.id)
+        file.writeText(Json.encodeToString(strategy))
     }
 
-    override fun getChecklist(strategyId: String): List<ChecklistItem>? {
-        val file = getFile(strategyId)
-        return if (file.exists()) {
+    override fun getAllStrategies(): List<Strategy> {
+        val files = File(context.filesDir, "checklists")
+            .takeIf { it.exists() }
+            ?.listFiles { _, name -> name.endsWith("_checklist.json") }
+            ?: return defaultStrategies()
+
+        val saved = files.mapNotNull { file ->
             try {
-                val content = file.readText()
-                Json.decodeFromString(content)
+                Json.decodeFromString<Strategy>(file.readText())
             } catch (e: Exception) {
                 null
             }
-        } else null
-    }
+        }
 
-    override fun getAllStrategies(): List<Strategy>? {
-        val files = context.filesDir?.listFiles()
-            ?.filter { it.name.endsWith("_checklist.json") }
-            ?: return null
+        val defaults = defaultStrategies()
 
-        return files.mapNotNull { file ->
-            val strategyId = file.name.removeSuffix("_checklist.json")
-            val checklist = getChecklist(strategyId)
-            checklist?.let {
-                Strategy(id = strategyId, name = strategyId, checklist = it, description = "Checklist for $strategyId")
-            }
+        return defaults.map { default ->
+            saved.find { it.id == default.id } ?: default
         }
     }
 }
