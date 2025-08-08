@@ -33,7 +33,7 @@ fun PagerIndicator(
             Box(
                 modifier = Modifier
                     .padding(horizontal = 4.dp)
-                    .size(8.dp)
+                    .size(16.dp)
                     .clip(CircleShape)
                     .background(color)
                     .clickable { onDotClick(index) }

@@ -17,7 +17,7 @@ fun main() = application {
         title = "TradingChecklist",
         state = rememberWindowState(
             width = 1000.dp,
-            height = 700.dp
+            height = 800.dp
         )
     ) {
         ChecklistScreen()
