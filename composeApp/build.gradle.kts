@@ -120,6 +120,16 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.carlosjimz87.tradingchecklist"
             packageVersion = "1.0.0"
+
+            macOS {
+                iconFile.set(project.file("src/jvmMain/resources/icon.icns"))
+            }
+            windows {
+                iconFile.set(project.file("src/jvmMain/resources/icon.ico"))
+            }
+            linux {
+                iconFile.set(project.file("src/jvmMain/resources/icon.png"))
+            }
         }
     }
 }

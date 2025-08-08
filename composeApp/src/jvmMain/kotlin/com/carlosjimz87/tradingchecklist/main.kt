@@ -1,5 +1,8 @@
 package com.carlosjimz87.tradingchecklist
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -13,8 +16,9 @@ fun main() = application {
     I18n.load(getCurrentLocale())
 
     Window(
-        onCloseRequest = ::exitApplication,
         title = "TradingChecklist",
+        icon = BitmapPainter(useResource("icon.png", ::loadImageBitmap)),
+        onCloseRequest = ::exitApplication,
         state = rememberWindowState(
             width = 1000.dp,
             height = 800.dp
