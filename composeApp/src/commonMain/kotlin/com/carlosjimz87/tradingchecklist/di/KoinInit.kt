@@ -10,3 +10,6 @@ public fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
         commonModule(provideStrategyStorage()),
     )
 }
+
+@Suppress("unused")
+fun doInitKoin() = initKoin()
