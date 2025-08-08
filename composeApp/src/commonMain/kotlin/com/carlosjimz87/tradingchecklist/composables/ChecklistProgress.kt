@@ -28,9 +28,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -51,14 +53,11 @@ fun ChecklistProgress(
     val showProgress = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val trackColor = if (progress == 1f) AppColors.Success else AppColors.Primary
-
-    LaunchedEffect(Unit) {
-        showProgress.value = true
-    }
+    val wasPreviouslyComplete = remember { mutableStateOf(false) }
 
     LaunchedEffect(progress) {
         showProgress.value = true
-        if (progress == 1f) {
+        if (progress == 1f && !wasPreviouslyComplete.value) {
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(
                     message = I18n.strings.completed_message,
@@ -66,6 +65,7 @@ fun ChecklistProgress(
                 )
             }
         }
+        wasPreviouslyComplete.value = (progress == 1f)
     }
 
     AnimatedVisibility(

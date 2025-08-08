@@ -44,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.carlosjimz87.tradingchecklist.composables.ChecklistItemList
 import com.carlosjimz87.tradingchecklist.composables.ChecklistListWithSave
 import com.carlosjimz87.tradingchecklist.composables.ChecklistProgress
 import com.carlosjimz87.tradingchecklist.composables.EmptyListMessage
@@ -73,6 +72,7 @@ fun ChecklistScreen(
     }.let { derived ->
         snapshotFlow { derived.value }.collectAsState(initial = 0)
     }
+    var wasManuallyReset by remember { mutableStateOf(false) }
 
     if (strategies.isEmpty()) {
         EmptyListMessage {
@@ -169,7 +169,6 @@ fun ChecklistScreen(
 
                                 key(restartKey) {
                                     ChecklistListWithSave(
-                                        restartKey = restartKey,
                                         checklistItems = checklistItems,
                                         onChecklistChange = { checklistItems = it },
                                         strategy = strategy,
@@ -192,7 +191,6 @@ fun ChecklistScreen(
                                 ) {
                                     key(restartKey) {
                                         ChecklistListWithSave(
-                                            restartKey = restartKey,
                                             checklistItems = checklistItems,
                                             onChecklistChange = { checklistItems = it },
                                             strategy = strategy,
@@ -240,6 +238,7 @@ fun ChecklistScreen(
                                         coroutineScope.launch {
                                             repository.resetStrategy(strategy.id)
                                         }
+                                        wasManuallyReset = true
                                         restartKey++
                                         showResetDialog = false
                                     },
