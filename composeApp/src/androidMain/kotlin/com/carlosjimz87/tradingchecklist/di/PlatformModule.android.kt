@@ -1,10 +1,10 @@
 package com.carlosjimz87.tradingchecklist.di
 
-import com.carlosjimz87.tradingchecklist.data.storage.AndroidChecklistStorage
-import com.carlosjimz87.tradingchecklist.data.storage.ChecklistStorage
+import com.carlosjimz87.tradingchecklist.data.storage.AndroidChecklistStorageImpl
+import com.carlosjimz87.tradingchecklist.data.storage.StrategyStorage
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 actual fun platformModule() = module {
-    single<ChecklistStorage> { AndroidChecklistStorage(context = androidContext()) }
+    single<StrategyStorage> { AndroidChecklistStorageImpl(context = androidContext()) }
 }

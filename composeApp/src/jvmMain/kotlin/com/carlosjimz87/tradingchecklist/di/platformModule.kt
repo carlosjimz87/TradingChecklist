@@ -1,9 +1,9 @@
 package com.carlosjimz87.tradingchecklist.di
 
-import com.carlosjimz87.tradingchecklist.data.storage.ChecklistStorage
 import com.carlosjimz87.tradingchecklist.data.storage.DesktopChecklistStorageImpl
+import com.carlosjimz87.tradingchecklist.data.storage.StrategyStorage
 import org.koin.dsl.module
 
 actual fun platformModule() = module {
-    single<ChecklistStorage> { DesktopChecklistStorageImpl() }
+    single<StrategyStorage> { DesktopChecklistStorageImpl() }
 }

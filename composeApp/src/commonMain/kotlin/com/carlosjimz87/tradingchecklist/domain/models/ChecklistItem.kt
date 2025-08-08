@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChecklistItem(
+    val id: String,
     val title: String,
     val checked: Boolean = false
 )

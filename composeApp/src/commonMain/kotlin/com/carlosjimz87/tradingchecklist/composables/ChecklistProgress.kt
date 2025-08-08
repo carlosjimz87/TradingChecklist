@@ -42,6 +42,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ChecklistProgress(
+    title: String,
     progress: Float,
     isCompact: Boolean,
     onReset: () -> Unit,
@@ -83,7 +84,7 @@ fun ChecklistProgress(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = I18n.strings.checklist_title,
+                text = title,
                 style = textStyle
             )
 
