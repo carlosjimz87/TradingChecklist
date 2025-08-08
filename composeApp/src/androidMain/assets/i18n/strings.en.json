@@ -1,6 +1,11 @@
 {
-  "checklist_title": "GOLD Checklist",
+  "checklist_title": "Trading Checklist",
   "reset_button": "Reset checklist",
   "completed_message": "Checklist completed!",
-  "confirm_reset": "Are you sure you want to uncheck all items?"
+  "confirm_reset": "Are you sure you want to uncheck all items?",
+  "cancel_button": "Cancel",
+  "yes_button": "Yes",
+  "retry_button": "Retry",
+  "fill_progress_label": "Fill progress",
+  "empty_checklist": "No checklist available"
 }

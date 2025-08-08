@@ -1,0 +1,11 @@
+{
+  "checklist_title": "交易清单",
+  "reset_button": "重置清单",
+  "completed_message": "清单已完成！",
+  "confirm_reset": "您确定要取消选择所有项目吗？",
+  "cancel_button": "取消",
+  "yes_button": "是",
+  "retry_button": "重试",
+  "fill_progress_label": "填写进度",
+  "empty_checklist": "没有可用的清单"
+}

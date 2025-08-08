@@ -1,6 +1,11 @@
 {
-  "checklist_title": "GOLD Checkliste",
+  "checklist_title": "Trading-Checkliste",
   "reset_button": "Checkliste zurücksetzen",
   "completed_message": "Checkliste abgeschlossen!",
-  "confirm_reset": "Möchten Sie wirklich alle Elemente abwählen?"
+  "confirm_reset": "Möchten Sie wirklich alle Elemente abwählen?",
+  "cancel_button": "Abbrechen",
+  "yes_button": "Ja",
+  "retry_button": "Wiederholen",
+  "fill_progress_label": "Fortschrittslinie",
+  "empty_checklist": "Keine Checkliste verfügbar"
 }

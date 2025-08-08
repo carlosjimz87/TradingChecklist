@@ -16,7 +16,7 @@ fun main() = application {
     I18n.load(getCurrentLocale())
 
     Window(
-        title = "TradingChecklist",
+        title = "Trading Checklist",
         icon = BitmapPainter(useResource("icon.png", ::loadImageBitmap)),
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(

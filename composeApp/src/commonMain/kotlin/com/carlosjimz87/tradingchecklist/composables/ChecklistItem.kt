@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.carlosjimz87.tradingchecklist.domain.models.ChecklistItem
+import com.carlosjimz87.tradingchecklist.i18n.I18n
 import com.carlosjimz87.tradingchecklist.ui.theme.AppColors
 
 @Composable
@@ -35,7 +36,7 @@ fun ChecklistItem(
     val transition = updateTransition(targetState = item.checked, label = "CheckTransition")
 
     val fillProgress by transition.animateFloat(
-        label = "FillProgress"
+        label = I18n.strings.fill_progress_label
     ) { if (it) 1f else 0f }
 
     val backgroundColor = AppColors.CompletedItemBackground

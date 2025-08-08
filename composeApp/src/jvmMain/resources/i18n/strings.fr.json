@@ -1,0 +1,11 @@
+{
+  "checklist_title": "Liste de contrôle de trading",
+  "reset_button": "Réinitialiser la liste",
+  "completed_message": "Liste complétée !",
+  "confirm_reset": "Êtes-vous sûr de vouloir décocher tous les éléments ?",
+  "cancel_button": "Annuler",
+  "yes_button": "Oui",
+  "retry_button": "Réessayer",
+  "fill_progress_label": "Remplir la progression",
+  "empty_checklist": "Aucune liste disponible"
+}

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.carlosjimz87.tradingchecklist.i18n.I18n
 import com.carlosjimz87.tradingchecklist.ui.theme.AppColors
 
 @Composable
@@ -24,15 +25,8 @@ fun EmptyListMessage(onRetry: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-//            Icon(
-//                imageVector = Icons.Default.Warning,
-//                contentDescription = "No checklist",
-//                tint = AppColors.OnSurface.copy(alpha = 0.5f),
-//                modifier = Modifier.size(64.dp)
-//            )
-//            Spacer(Modifier.height(12.dp))
             Text(
-                text = "No checklist available.",
+                text = I18n.strings.empty_checklist,
                 style = MaterialTheme.typography.bodyMedium,
                 color = AppColors.OnSurface.copy(alpha = 0.6f)
             )
@@ -41,7 +35,7 @@ fun EmptyListMessage(onRetry: () -> Unit) {
                 onClick = onRetry,
                 colors = ButtonDefaults.buttonColors(containerColor = AppColors.Primary)
             ) {
-                Text("Retry")
+                Text(I18n.strings.retry_button)
             }
         }
     }

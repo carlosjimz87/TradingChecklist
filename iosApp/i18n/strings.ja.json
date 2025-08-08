@@ -1,0 +1,11 @@
+{
+  "checklist_title": "トレーディングチェックリスト",
+  "reset_button": "チェックリストをリセット",
+  "completed_message": "チェックリストが完了しました！",
+  "confirm_reset": "すべての項目の選択を解除してもよろしいですか？",
+  "cancel_button": "キャンセル",
+  "yes_button": "はい",
+  "retry_button": "再試行",
+  "fill_progress_label": "進捗を埋める",
+  "empty_checklist": "利用可能なチェックリストがありません"
+}

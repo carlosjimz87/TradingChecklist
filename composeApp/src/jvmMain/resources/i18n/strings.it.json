@@ -1,0 +1,11 @@
+{
+  "checklist_title": "Checklist di trading",
+  "reset_button": "Reimposta checklist",
+  "completed_message": "Checklist completata!",
+  "confirm_reset": "Sei sicuro di voler deselezionare tutti gli elementi?",
+  "cancel_button": "Annulla",
+  "yes_button": "Sì",
+  "retry_button": "Riprova",
+  "fill_progress_label": "Completa il progresso",
+  "empty_checklist": "Nessuna checklist disponibile"
+}

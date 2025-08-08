@@ -1,0 +1,11 @@
+{
+  "checklist_title": "Торговый чеклист",
+  "reset_button": "Сбросить чеклист",
+  "completed_message": "Чеклист завершён!",
+  "confirm_reset": "Вы уверены, что хотите снять отметки со всех пунктов?",
+  "cancel_button": "Отмена",
+  "yes_button": "Да",
+  "retry_button": "Повторить",
+  "fill_progress_label": "Заполнить прогресс",
+  "empty_checklist": "Чеклист недоступен"
+}

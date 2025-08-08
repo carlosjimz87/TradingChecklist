@@ -1,6 +1,11 @@
 {
-  "checklist_title": "Lista de Checks GOLD",
+  "checklist_title": "Checks de Trading",
   "reset_button": "Reiniciar lista",
   "completed_message": "¡Lista completada!",
-  "confirm_reset": "¿Estás seguro de que deseas desmarcar todos los elementos?"
+  "confirm_reset": "¿Estás seguro de que deseas desmarcar todos los elementos?",
+  "cancel_button": "Cancelar",
+  "yes_button": "Aceptar",
+  "retry_button": "Reintentar",
+  "fill_progress_label": "Línea de progreso",
+  "empty_checklist": "No hay lista disponible"
 }

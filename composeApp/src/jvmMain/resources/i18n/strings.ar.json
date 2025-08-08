@@ -1,0 +1,11 @@
+{
+  "checklist_title": "قائمة مراجعة التداول",
+  "reset_button": "إعادة تعيين القائمة",
+  "completed_message": "تم إكمال القائمة!",
+  "confirm_reset": "هل أنت متأكد من أنك تريد إلغاء تحديد جميع العناصر؟",
+  "cancel_button": "إلغاء",
+  "yes_button": "نعم",
+  "retry_button": "إعادة المحاولة",
+  "fill_progress_label": "ملء التقدم",
+  "empty_checklist": "لا توجد قائمة متاحة"
+}

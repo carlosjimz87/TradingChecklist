@@ -134,13 +134,33 @@ compose.desktop {
         }
     }
 }
+val i18nSourceDir = "src/commonMain/resources/i18n"
+
+// === Copy to each target ===
+val copyCommonResourcesToJvm by tasks.registering(Copy::class) {
+    from(i18nSourceDir)
+    into("$rootDir/composeApp/src/jvmMain/resources/i18n")
+}
+
+val copyCommonResourcesToIos by tasks.registering(Copy::class) {
+    from(i18nSourceDir)
+    into("$rootDir/iosApp/i18n")
+}
+
+val copyCommonResourcesToAndroid by tasks.registering(Copy::class) {
+    from(i18nSourceDir)
+    into("$rootDir/composeApp/src/androidMain/assets/i18n")
+}
+
+// === Hook into relevant lifecycle tasks ===
 tasks.named("jvmProcessResources") {
-    dependsOn("copyCommonResourcesToJvm")
+    dependsOn(copyCommonResourcesToJvm)
 }
 
-tasks.register<Copy>("copyCommonResourcesToJvm") {
-    from("src/commonMain/resources/i18n")
-    into("build/generated/commonResources/jvm/i18n")
+tasks.matching { it.name.contains("ios", ignoreCase = true) && it.name.contains("Compile") }.configureEach {
+    dependsOn(copyCommonResourcesToIos)
 }
 
-kotlin.sourceSets.getByName("jvmMain").resources.srcDir("build/generated/commonResources/jvm")
+tasks.matching { it.name in listOf("mergeDebugAssets", "mergeReleaseAssets") }.configureEach {
+    dependsOn(copyCommonResourcesToAndroid)
+}

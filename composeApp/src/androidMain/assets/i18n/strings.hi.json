@@ -1,0 +1,11 @@
+{
+  "checklist_title": "ट्रेडिंग चेकलिस्ट",
+  "reset_button": "चेकलिस्ट रीसेट करें",
+  "completed_message": "चेकलिस्ट पूरी हुई!",
+  "confirm_reset": "क्या आप वाकई सभी आइटम को अनचेक करना चाहते हैं?",
+  "cancel_button": "रद्द करें",
+  "yes_button": "हाँ",
+  "retry_button": "फिर से प्रयास करें",
+  "fill_progress_label": "प्रगति भरें",
+  "empty_checklist": "कोई चेकलिस्ट उपलब्ध नहीं है"
+}
